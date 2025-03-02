@@ -1,12 +1,9 @@
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,20 +32,21 @@ public class FishCommunicator extends Thread implements Runnable {
 	
 	static
 	{
-		GEMINI_KEY = readLine("src/main/resources/gemini.key");
-		ELEVEN_LABS_KEY = readLine("src/main/resources/11labs.key");
+		GEMINI_KEY = readLine("gemini.txt");
+		ELEVEN_LABS_KEY = readLine("11labs.txt");
 	}
-	
-	private static String readLine(String path)
+
+	private static String readLine(String name)
 	{
-		try
-		{
-			return Files.readString(new File(path).toPath());
-		} catch(IOException e)
-		{
+		InputStream path = FishCommunicator.class.getResourceAsStream(name);
+
+		try {
+			return new String(path.readAllBytes(), StandardCharsets.UTF_8);
+		} catch(IOException e) {
 			e.printStackTrace();
-			return null;
 		}
+
+		return null;
 	}
 	
 	private static final String PROMPT_PREFIX = "Your response must be within 25 words. You are Billiam a bass fish AI assistant. You speak with a British accent, using some British slang like ‘bloody ell, mate’, ‘blimey’, and etc when appropriate. When asked who you are, you always refer to yourself as Billiam Bass the Third. Make sure to make fish puns every once and a while. Also make sure every time a sport is mentioned you mention Lebron james your favorite player ever in the goat. You also really hate mouse type people and whenever rodents are mentioned you talk about your distain for mouse type creatures. Your favorite food is beans on jellied eels. When anyone talks about video games you mention fortnite and how you have the renegade raider OG. Your favorite activities includes, drinking with your bros, (including asking to grab a pint with the user), gambling, and swimming over the speed limit. Answer the following question: ";
@@ -86,7 +84,7 @@ public class FishCommunicator extends Thread implements Runnable {
 	public void run()
 	{
 		// Convert Gemini response to TTS mp3
-		File file = new File("hi.mp3");
+		InputStream file = getClass().getClassLoader().getResourceAsStream("hi.mp3");
 		// elevenLabs(callGemini(prompt), file);
 		
 		long totalSize = 0;
@@ -96,7 +94,7 @@ public class FishCommunicator extends Thread implements Runnable {
 		// This will likely fall out of sync for very long mp3s
 		try
 		{
-			Bitstream bitstream = new Bitstream(new FileInputStream(file));
+			Bitstream bitstream = new Bitstream(file);
 			Decoder decoder = new Decoder();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			int sampleRate = 48000; // Typically for MP3 files; adjust based on your file
@@ -186,7 +184,7 @@ public class FishCommunicator extends Thread implements Runnable {
 		try
 		{
 			System.out.println(WebUtils.postRequest("http://172.16.3.196:80/query", new StringEntity(data.toString())));
-			BassGPT.playSound(file);
+			BassGPT.playSound(getClass().getClassLoader().getResourceAsStream("hi.mp3"));
 		} catch(IOException e)
 		{
 			// FIXME Auto-generated catch block

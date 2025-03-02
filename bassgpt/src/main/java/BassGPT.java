@@ -50,7 +50,7 @@ public class BassGPT {
 		}
 		
 		// Use the first available port (COM5, change as needed)
-		SerialPort serialPort = Stream.of(ports).filter(port -> port.getDescriptivePortName().contains("USB Serial")).findFirst().orElse(null);
+		SerialPort serialPort = Stream.of(ports).filter(port -> port.getDescriptivePortName().contains("USB-SERIAL")).findFirst().orElse(null);
 		
 		if(serialPort == null)
 		{
@@ -85,7 +85,7 @@ public class BassGPT {
 						if(frame.isVisible())
 						{
 							fireTorso(false);
-							BassGPT.playSound(new File("ping.mp3"));
+							BassGPT.playSound(BassGPT.class.getResourceAsStream("ping.mp3"));
 							// Hide frame while fish question is being asked
 							frame.setVisible(false);
 							// Fire request
@@ -131,16 +131,16 @@ public class BassGPT {
 		System.out.println(WebUtils.postRequest("http://172.16.3.196:80/torso", object.toString()));
 	}
 	
-	public static void playSound(File file)
+	public static void playSound(InputStream file)
 	{
 		Thread thread = new Thread(() ->
 		{
 			Player player;
 			try
 			{
-				player = new Player(new FileInputStream(file));
+				player = new Player(file);
 				player.play();
-			} catch(FileNotFoundException | JavaLayerException e)
+			} catch(JavaLayerException e)
 			{
 				e.printStackTrace();
 			}
