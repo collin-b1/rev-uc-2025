@@ -1,8 +1,8 @@
-<p style="text-align:center;font-weight:bold;">
-    <img style="margin:0 auto;" alt="BassGPT Logo" src="./logo.png" />
-</p>
+# BassGPT
 
-<p style="text-align:center;font-weight:bold;">Your new favorite companion and assistant. BassGPT brings a refreshing feel to arti-fish-ial intelligence.</p>
+![BassGPT Logo](./logo.png)
+
+**Your new favorite companion and assistant. BassGPT brings a refreshing feel to arti-fish-ial intelligence.**
 
 ## Hardware and Technology
 
