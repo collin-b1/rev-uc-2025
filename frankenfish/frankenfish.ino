@@ -69,6 +69,7 @@ void setup() {
   // Webserver Setup
   server.on("/", handleOnConnect);
   server.on("/query", HTTP_POST, handleQuery);
+  server.on("/torso", HTTP_POST, handleTorso);
   server.begin();
   Serial.println("HTTP server started");
 }
@@ -86,7 +87,7 @@ void loop() {
 
     if (currentMillis - lastMotorTime >= PLAYBACK_BUFFER_RATE) {
       lastMotorTime = currentMillis;
-      
+
       // playBackArray(sampleBuffer, sizeof(sampleBuffer) / sizeof(sampleBuffer[0]));
       setMouth(buffer[frame]);
       ++frame;
@@ -152,4 +153,25 @@ void handleQuery() {
   } else {
     server.send(400, "application/json", "{\"message\":\"Bad request: No JSON object received.\"}");
   }
+}
+
+void handleTorso() {
+  if (server.hasArg("plain")) {
+    String body = server.arg("plain");
+    // Serial.println("Received POST data: " + body);
+
+    JsonDocument doc;
+    DeserializationError err = deserializeJson(doc, body);
+
+    // Handle error
+    if (err) {
+      // Serial.println("Deserialize Error");
+      server.send(500, "application/json", "{\"message:\": \"Server failed to parse JSON object.\"}");
+      return;
+    }
+
+    bool toggle = doc["value"].as<bool>();
+    setTorso(toggle);
+  }
+  server.send(200, "application/json", "{\"message\":\"gotchu bro.\"}");
 }

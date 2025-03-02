@@ -37,8 +37,8 @@ public class FishCommunicator extends Thread implements Runnable {
 	
 	static
 	{
-		GEMINI_KEY = readLine("src/main/resources/key.txt");
-		ELEVEN_LABS_KEY = readLine("src/main/resources/11labs.txt");
+		GEMINI_KEY = readLine("src/main/resources/gemini.key");
+		ELEVEN_LABS_KEY = readLine("src/main/resources/11labs.key");
 	}
 	
 	private static String readLine(String path)

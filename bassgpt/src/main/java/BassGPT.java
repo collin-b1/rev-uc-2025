@@ -79,7 +79,7 @@ public class BassGPT {
 					{
 						// Prompt for input
 						String prompt = area.getText();
-						if(prompt == null || prompt.isBlank())
+						if(prompt == null || prompt.isEmpty())
 							prompt = "Introduce yourself!";
 						
 						if(frame.isVisible())
