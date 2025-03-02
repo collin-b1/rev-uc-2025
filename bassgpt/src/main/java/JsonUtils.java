@@ -1,5 +1,3 @@
-
-
 import java.util.function.Function;
 
 import com.google.gson.Gson;
